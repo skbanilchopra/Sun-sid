@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sun-sid — Login</title><link rel="stylesheet" href="../style.css"></head>
+<body>
+<main class="container">
+<h1>Sun-sid</h1><p>Sign in to your account</p>
+<form id="loginForm">
+<input id="email" type="email" placeholder="Email" autocomplete="email" required>
+<input id="password" type="password" placeholder="Password" autocomplete="current-password" required>
+<button type="submit">Login</button>
+</form>
+<p id="message" role="alert"></p><a href="register.html">Create an account</a>
+</main>
+<script type="module">
+import { login, watchAuth } from "../auth.js";
+watchAuth(user => { if (user) window.location.replace("../index.html"); });
+document.getElementById("loginForm").addEventListener("submit", async e => {
+ e.preventDefault(); const message=document.getElementById("message"); message.textContent="Signing in…";
+ try { await login(document.getElementById("email").value.trim(), document.getElementById("password").value); window.location.replace("../index.html"); }
+ catch (error) { message.textContent=error.code || "Login failed."; }
+});
+</script>
+</body></html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sun-sid — Register</title><link rel="stylesheet" href="../style.css"></head>
+<body>
+<main class="container">
+<h1>Create account</h1>
+<form id="registerForm">
+<input id="name" type="text" placeholder="Full name" autocomplete="name" required>
+<input id="email" type="email" placeholder="Email" autocomplete="email" required>
+<input id="password" type="password" placeholder="Password (6+ characters)" autocomplete="new-password" minlength="6" required>
+<input id="confirmPassword" type="password" placeholder="Confirm password" autocomplete="new-password" minlength="6" required>
+<button type="submit">Register</button>
+</form>
+<p id="message" role="alert"></p><a href="login.html">Already have an account? Login</a>
+</main>
+<script type="module">
+import { register, watchAuth } from "../auth.js";
+watchAuth(user => { if (user) window.location.replace("../index.html"); });
+document.getElementById("registerForm").addEventListener("submit", async e => {
+ e.preventDefault(); const message=document.getElementById("message"); const password=document.getElementById("password").value;
+ if (password !== document.getElementById("confirmPassword").value) { message.textContent="Passwords do not match."; return; }
+ message.textContent="Creating account…";
+ try {
+   await register({name:document.getElementById("name").value,email:document.getElementById("email").value.trim(),password});
+   window.location.replace("../index.html");
+ } catch (error) { message.textContent=error.code || "Registration failed."; }
+});
+</script>
+</body></html>
